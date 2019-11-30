@@ -14,9 +14,9 @@ public class SubscriptionNrExtractorTest {
 
     private static Stream<Arguments> samples() {
         return Stream.of(
-                Arguments.of("K EN L 2020 ABONR 40502563", "40502563"),
-                Arguments.of("ANR 40502520", "40502520"),
-                Arguments.of("KEN L 2020 - ABONR.40502572", "40502572")
+                Arguments.of("K EN L 2020 ABONR 40502563", "40502563"), // Clean
+                Arguments.of("ANR 40502520", "40502520"), // Shortened
+                Arguments.of("KEN L 2020 - ABONR.40502572", "40502572") // Attached to other content
                 );
     }
 
@@ -28,32 +28,10 @@ public class SubscriptionNrExtractorTest {
     }
 
     @Test
-    void cleanCase() {
-        String note = "K EN L 2020 ABONR 40502563";
-        Optional<String> subscriptionNr = SubscriptionNrExtractor.extract(note);
-        assertThat(subscriptionNr).get().isEqualTo("40502563");
-    }
-
-    @Test
-    void shortened() {
-        String note = "ANR 40502520";
-        Optional<String> subscriptionNr = SubscriptionNrExtractor.extract(note);
-        assertThat(subscriptionNr).get().isEqualTo("40502520");
-    }
-
-    @Test
-    void attached() {
-        String note = "KEN L 2020 - ABONR.40502572";
-        Optional<String> subscriptionNr = SubscriptionNrExtractor.extract(note);
-        assertThat(subscriptionNr).get().isEqualTo("40502572");
-    }
-
-    @Test
     void missing() {
         String note = "ABONNEMENT";
         Optional<String> subscriptionNr = SubscriptionNrExtractor.extract(note);
         assertThat(subscriptionNr).isEmpty();
     }
-
 
 }

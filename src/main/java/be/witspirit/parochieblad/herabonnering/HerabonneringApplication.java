@@ -17,10 +17,16 @@ public class HerabonneringApplication implements CommandLineRunner {
         SpringApplication.run(HerabonneringApplication.class, args);
     }
 
+    private SubscriptionConfig config;
+
+    public HerabonneringApplication(SubscriptionConfig config) {
+        this.config = config;
+    }
+
     @Override
     public void run(String... args) throws Exception {
         // NOTE: Had to add an extra ; to the header as all the other rows are also terminated with a ; Which in fact creates an empty final column.
-        FileReader fileReader = new FileReader("data/BE83736051764015_02-06-2019_tot_23-11-2019.csv");
+        FileReader fileReader = new FileReader(config.getInputFilepath());
         List<PaymentStatement> paymentStatements = new CsvToBeanBuilder<PaymentStatement>(fileReader)
                 .withSeparator(';')
                 .withType(PaymentStatement.class)
@@ -46,7 +52,5 @@ public class HerabonneringApplication implements CommandLineRunner {
         dirtyCandidates.forEach(System.out::println);
 
         System.out.println(cleanCandidates.size()+"/"+candidateSubscriptions.size()+" Clean ; "+dirtyCandidates.size()+"/"+candidateSubscriptions.size()+" Dirty");
-
-
     }
 }
