@@ -32,3 +32,4 @@ build/
 
 ### Custom ###
 /data/*.csv
+/src/main/resources/config/application.properties
